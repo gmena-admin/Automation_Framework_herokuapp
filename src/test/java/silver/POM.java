@@ -1,7 +1,6 @@
 package silver;
 
 import java.io.File;
-import java.io.IOException;
 import java.time.Duration;
 
 import org.apache.commons.io.FileUtils;
