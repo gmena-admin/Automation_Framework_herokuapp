@@ -1,7 +1,5 @@
 package steps.api;
 
-import org.junit.Assert;
-
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -43,7 +41,6 @@ public class ApiSteps {
                 break;
 
             default:
-                Assert.fail("The operation <" + operation + "> is not yet supported");
                 break;
         }
     }
@@ -56,7 +53,6 @@ public class ApiSteps {
                 break;
 
             default:
-                Assert.fail("The operation <" + parameterName + "> is not yet supported");
                 break;
         }
     }

@@ -54,31 +54,26 @@ public class Preconditions {
     }
 
     private void afterScenarioDefault() {
-        System.out.println("After Scenario Default");
     }
 
     private void afterScenarioMobile() {
-        System.out.println("After Scenario Mobile");
 
     }
 
     private void afterScenarioWeb() {
-        System.out.println("After Scenario Web");
         if (driver != null) {
-            driver.close();
+            driver.quit();
         }
     }
 
     private void beforeScenarioDefault() {
-        System.out.println("Scenario Default");
+        
     }
 
     private void beforeScenarioMobile() {
-        System.out.println("Scenario Mobile");
     }
 
     private void beforeScenarioWeb() {
-        System.out.println("Scenario Web");
         FirefoxOptions options = new FirefoxOptions();
         options.addArguments("--headless");
         driver = new FirefoxDriver(options);

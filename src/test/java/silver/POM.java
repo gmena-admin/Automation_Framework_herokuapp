@@ -1,10 +1,12 @@
 package silver;
 
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.time.Duration;
 
 import org.apache.commons.io.FileUtils;
-import org.junit.Assert;
+import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
@@ -13,6 +15,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+
+import io.qameta.allure.Allure;
 
 public class POM {
 
@@ -54,10 +58,10 @@ public class POM {
 
         WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(property)));
 
-        Assert.assertNotNull("The element <" + property + "> has not been found in the website", element);
-
         if (takeScreenshot)
             takeScreenshot(element);
+
+        Assertions.assertNotNull(element, "No element <" + elementName + "> has been found in the website");
 
         return element;
 
@@ -69,25 +73,38 @@ public class POM {
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(timeout));
 
-        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(property)));
-
-        Assert.assertNull("The element <" + property + "> has been found in the website", element);
+        boolean element = wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath(property)));
 
         if (takeScreenshot)
             takeScreenshot(null);
+
+        Assertions.assertTrue(element, "An element <" + elementName + "> has been found in the website");
 
     }
 
     public void takeScreenshot(WebElement elementNode) {
         try {
+
+            byte[] scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+
+            Allure.addAttachment("screenshot_withNo_highlight" + ++indexScreenshot, "image/png",
+                    new java.io.ByteArrayInputStream(scrFile), ".png");
+
             if (elementNode != null) {
                 JavascriptExecutor jse = (JavascriptExecutor) driver;
                 // highlight the element with red border 5px width
                 jse.executeScript("arguments[0].style.border='5px solid yellow'", elementNode);
-            }
-            File scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
 
-            FileUtils.copyFile(scrFile, new File("screenshot_" + ++indexScreenshot + ".png"));
+                scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+
+                Allure.addAttachment("screenshot_with_highlight_" + indexScreenshot, "image/png",
+                        new java.io.ByteArrayInputStream(scrFile), ".png");
+
+                jse = (JavascriptExecutor) driver;
+                // highlight the element with red border 5px width
+                jse.executeScript("arguments[0].style.border='none'", elementNode);
+
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }

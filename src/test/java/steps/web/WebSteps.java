@@ -1,9 +1,12 @@
 package steps.web;
 
+import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.WebDriver;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
+import io.qameta.allure.Allure;
+import io.qameta.allure.Attachment;
 import poms.nopCommerce.POM_HeaderLogin;
 import steps.hooks.Preconditions;
 
@@ -22,6 +25,7 @@ public class WebSteps {
     @Then("Assert that the user is in the page")
     public void verifyPage() {
         pomHeaderLogin.checkLogo();
-    }
+   }
+
 
 }

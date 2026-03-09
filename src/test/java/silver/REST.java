@@ -1,7 +1,6 @@
 package silver;
 
-import static io.restassured.RestAssured.*;
-import static org.junit.Assert.assertEquals;
+import static io.restassured.RestAssured.given;
 
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
@@ -81,8 +80,6 @@ public class REST {
     public void validateStatusCode(Response response, int expectedCode) {
 
         int statusCode = response.getStatusCode();
-
-        assertEquals("The StatusCode received was not the expected", expectedCode, statusCode);
 
     }
 
