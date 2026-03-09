@@ -10,7 +10,7 @@ import io.cucumber.junit.CucumberOptions;
     glue = {"steps"},
     plugin = {"pretty", "html:target/cucumber-report.html"},
     monochrome = true,
-    tags = "@WEB"
+    tags = "not @WIP"
 
 )
 public class TestRunner {

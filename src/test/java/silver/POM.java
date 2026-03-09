@@ -17,7 +17,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 public class POM {
 
     private WebDriver driver;
-    private XpathReader xpathReader;
+    private Reader reader;
     private int indexScreenshot = 0;
 
     public static final int SHORTEST_TIMEOUT = 2000;
@@ -27,7 +27,7 @@ public class POM {
 
     public POM(WebDriver driver) {
         this.driver = driver;
-        this.xpathReader = new XpathReader();
+        this.reader = new Reader();
     }
 
     public void clickOn(String elementName, String... propertyList) {
@@ -48,7 +48,7 @@ public class POM {
 
     public WebElement find(boolean takeScreenshot, int timeout, String elementName, String... propertyList) {
 
-        String property = xpathReader.readProperty(elementName, propertyList);
+        String property = reader.readProperty(elementName, propertyList);
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(timeout));
 
@@ -65,7 +65,7 @@ public class POM {
 
     public void not_find(boolean takeScreenshot, int timeout, String elementName, String... propertyList) {
 
-        String property = xpathReader.readProperty(elementName, propertyList);
+        String property = reader.readProperty(elementName, propertyList);
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(timeout));
 
@@ -82,7 +82,7 @@ public class POM {
         try {
             if (elementNode != null) {
                 JavascriptExecutor jse = (JavascriptExecutor) driver;
-                // highlight the element with red border 3px width
+                // highlight the element with red border 5px width
                 jse.executeScript("arguments[0].style.border='5px solid yellow'", elementNode);
             }
             File scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
