@@ -2,6 +2,8 @@ package silver;
 
 import static io.restassured.RestAssured.given;
 
+import org.junit.jupiter.api.Assertions;
+
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 
@@ -80,6 +82,7 @@ public class REST {
     public void validateStatusCode(Response response, int expectedCode) {
 
         int statusCode = response.getStatusCode();
+        Assertions.assertEquals(expectedCode, statusCode, "The StatusCode received is not the expected");
 
     }
 
