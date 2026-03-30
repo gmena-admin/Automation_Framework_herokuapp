@@ -1,4 +1,4 @@
-package poms.nopCommerce;
+package poms.thinking_tester_contact_list;
 
 import org.openqa.selenium.WebDriver;
 
@@ -10,5 +10,4 @@ public class POM_HeaderMenu extends POM {
         super(driver);
     }
 
-    
 }

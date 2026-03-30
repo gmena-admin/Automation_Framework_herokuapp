@@ -60,6 +60,15 @@ public class REST {
         return response;
     }
 
+        public Response patch(String path, String... params) {
+        Response response = null;
+
+        RequestSpecification specs = getSpecs(path, true, params);
+        response = specs.when().patch();
+
+        return response;
+    }
+
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
     // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -

@@ -7,12 +7,14 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import io.qameta.allure.Allure;
+import steps.hooks.Preconditions;
 
 public class POM {
 
@@ -32,35 +34,46 @@ public class POM {
 
     public void clickOn(String elementName, String... propertyList) {
 
-        WebElement element = find(false, SHORTEST_TIMEOUT, elementName, propertyList);
+        WebElement element = find(Preconditions.isDebugScreenshot(), SHORTEST_TIMEOUT, elementName, propertyList);
 
         element.click();
 
     }
 
-    public void writeIn(String elementName, String text, String... propertyList) {
+    public void writeIn(String text, String elementName, String... propertyList) {
 
-        WebElement element = find(false, SHORTEST_TIMEOUT, elementName, propertyList);
+        WebElement element = find(Preconditions.isDebugScreenshot(), SHORTEST_TIMEOUT, elementName, propertyList);
 
         element.sendKeys(text);
+
+    }
+
+    public String getText(String elementName, String... propertyList) {
+
+        WebElement element = find(Preconditions.isDebugScreenshot(), SHORTEST_TIMEOUT, elementName, propertyList);
+
+        return element.getText();
 
     }
 
     public WebElement find(boolean takeScreenshot, int timeout, String elementName, String... propertyList) {
 
         String property = reader.readProperty(elementName, propertyList);
-
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(timeout));
+        try {
 
-        WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(property)));
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(property)));
 
-        if (takeScreenshot)
-            takeScreenshot(element);
+            if (takeScreenshot)
+                takeScreenshot(element);
 
-        Assertions.assertNotNull(element, "No element <" + elementName + "> has been found in the website");
-
-        return element;
-
+            return element;
+        } catch (TimeoutException e) {
+            takeScreenshot(null);
+            Assertions.fail("No element <" + elementName + "> has been found in the website for this xpath: <"
+                    + property + ">");
+        }
+        return null;
     }
 
     public void not_find(boolean takeScreenshot, int timeout, String elementName, String... propertyList) {
@@ -69,32 +82,48 @@ public class POM {
 
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(timeout));
 
-        boolean element = wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath(property)));
+        boolean foundElement = wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath(property)));
 
-        if (takeScreenshot)
-            takeScreenshot(null);
+        if (!foundElement) {
+            if (takeScreenshot)
+                takeScreenshot(null);
 
-        Assertions.assertTrue(element, "An element <" + elementName + "> has been found in the website");
+        } else {
+
+            WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(property)));
+
+            takeScreenshot(element);
+
+            Assertions.fail("An element <" + elementName + "> has been found in the website");
+
+        }
 
     }
 
     public void takeScreenshot(WebElement elementNode) {
         try {
 
-            byte[] scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+            if (elementNode == null) {
+                byte[] scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
 
-            Allure.addAttachment("screenshot_withNo_highlight" + ++indexScreenshot, "image/png",
-                    new java.io.ByteArrayInputStream(scrFile), ".png");
+                Allure.addAttachment(
+                        Preconditions.getScenarioName() + "_" + this.getClass().getSimpleName() + "_"
+                                + ++indexScreenshot,
+                        "image/png",
+                        new java.io.ByteArrayInputStream(scrFile), ".png");
 
-            if (elementNode != null) {
+            } else {
                 JavascriptExecutor jse = (JavascriptExecutor) driver;
                 // highlight the element with red border 5px width
                 jse.executeScript("arguments[0].style.border='5px solid yellow'", elementNode);
 
-                scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
+                byte[] scrFileWithJS = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
 
-                Allure.addAttachment("screenshot_with_highlight_" + indexScreenshot, "image/png",
-                        new java.io.ByteArrayInputStream(scrFile), ".png");
+                Allure.addAttachment(
+                        Preconditions.getScenarioName() + "__" + this.getClass().getSimpleName() + "_"
+                                + ++indexScreenshot,
+                        "image/png",
+                        new java.io.ByteArrayInputStream(scrFileWithJS), ".png");
 
                 jse = (JavascriptExecutor) driver;
                 // highlight the element with red border 5px width
