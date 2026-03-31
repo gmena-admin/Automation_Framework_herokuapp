@@ -5,7 +5,7 @@ import java.util.Properties;
 
 import com.google.gson.Gson;
 
-public class Reader {
+public class UtilityReader {
 
     public String readProperty(String name, String... parameters) {
         String xpath = "";
@@ -14,7 +14,7 @@ public class Reader {
 
         try {
             // load a properties file from class path, inside static method
-            prop.load(Reader.class.getClassLoader().getResourceAsStream("xpath_repository.properties"));
+            prop.load(UtilityReader.class.getClassLoader().getResourceAsStream("xpath_repository.properties"));
 
             // get the property value and print it out
             xpath = prop.getProperty(name);
@@ -39,7 +39,7 @@ public class Reader {
 
         try {
             // load a properties file from class path, inside static method
-            prop.load(Reader.class.getClassLoader().getResourceAsStream("errors_addUser.properties"));
+            prop.load(UtilityReader.class.getClassLoader().getResourceAsStream("errors_addUser.properties"));
 
             // get the property value and print it out
             xpath = prop.getProperty(name);
@@ -60,7 +60,7 @@ public class Reader {
     public String readJSON(String filename) {
         Gson gson = new Gson();
 
-        String payload = Reader.class.getClassLoader().getResourceAsStream("payloads/" + filename).toString();
+        String payload = UtilityReader.class.getClassLoader().getResourceAsStream("payloads/" + filename).toString();
 
         return gson.toJson(payload);
 

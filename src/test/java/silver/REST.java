@@ -1,98 +1,132 @@
 package silver;
 
-import static io.restassured.RestAssured.given;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.nio.charset.StandardCharsets;
 
 import org.junit.jupiter.api.Assertions;
 
-import io.restassured.response.Response;
-import io.restassured.specification.RequestSpecification;
+import com.google.gson.Gson;
+
+import io.restassured.internal.common.assertion.Assertion;
 
 public class REST {
 
-    private String endpoint;
-    private Reader reader;
+    private String baseURL;
+    private String environmentName;
+    private Catalog catalog;
 
-    private String payload;
+    public REST(String environment, String catalogName) {
 
-    public REST(String endpoint) {
-        this.endpoint = endpoint;
-        reader = new Reader();
-        payload = "";
-    }
+        this.environmentName = searchAndSetName(environment);
+        this.baseURL = searchAndSetBaseURL();
+        this.catalog = searchAndSetCatalog(catalogName);
 
-    public void setPayload(String filename) {
-        payload = reader.readJSON(filename);
-    }
-
-    public Response post(String path, String... params) {
-        Response response = null;
-
-        RequestSpecification specs = getSpecs(path, false, params);
-        response = specs.when().post();
-
-        return response;
-    }
-
-    public Response get(String path, String... params) {
-        Response response = null;
-
-        RequestSpecification specs = getSpecs(path, true, params);
-        response = specs.when().get();
-
-        return response;
-    }
-
-    public Response put(String path, String... params) {
-        Response response = null;
-
-        RequestSpecification specs = getSpecs(path, true, params);
-        response = specs.when().put();
-
-        return response;
-    }
-
-    public Response delete(String path, String... params) {
-        Response response = null;
-
-        RequestSpecification specs = getSpecs(path, true, params);
-        response = specs.when().delete();
-
-        return response;
-    }
-
-        public Response patch(String path, String... params) {
-        Response response = null;
-
-        RequestSpecification specs = getSpecs(path, true, params);
-        response = specs.when().patch();
-
-        return response;
-    }
-
-    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-    // - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-
-    private RequestSpecification getSpecs(String path, boolean isPayload, String... params) {
-        RequestSpecification specs;
-        if (isPayload)
-            specs = given().relaxedHTTPSValidation().baseUri(endpoint).basePath(path).body(payload);
-        else
-            specs = given().relaxedHTTPSValidation().baseUri(endpoint).basePath(path);
-
-        if (params.length > 0 && params.length % 2 == 0) {
-            for (int i = 0; i < params.length; i = i + 2) {
-                specs = specs.param(params[i], params[i + 1]);
-            }
+        for (Endpoint endpointFromList : catalog.getListEndpoint()) {
+            endpointFromList.loadPayload();
         }
-        return specs;
+
     }
 
-    public void validateStatusCode(Response response, int expectedCode) {
+    private String searchAndSetName(String environmentStr) {
 
-        int statusCode = response.getStatusCode();
-        Assertions.assertEquals(expectedCode, statusCode, "The StatusCode received is not the expected");
+        Gson gson = new Gson();
+        try (InputStream is = REST.class.getClassLoader().getResourceAsStream("api_data/environment.json")) {
 
+            Reader reader = new InputStreamReader(is, StandardCharsets.UTF_8);
+
+            Environment[] listEnvironment = gson.fromJson(reader, Environment[].class);
+
+            for (Environment environment : listEnvironment) {
+                if (environment.getNameEnv().equals(environmentStr))
+                    return environment.getNameEnv();
+            }
+        } catch (IOException e) {
+            Assertions.fail("The file <resources/api_data/environment.json> is not found");
+        }
+
+        return null;
+
+    }
+
+    private String searchAndSetBaseURL() {
+
+        Gson gson = new Gson();
+        try (InputStream is = REST.class.getClassLoader().getResourceAsStream("api_data/environment.json")) {
+
+            Reader reader = new InputStreamReader(is, StandardCharsets.UTF_8);
+
+            Environment[] listEnvironment = gson.fromJson(reader, Environment[].class);
+
+            for (Environment environment : listEnvironment) {
+                if (environment.getNameEnv().equals(environmentName))
+                    return environment.getBaseUrl();
+            }
+        } catch (IOException e) {
+            Assertions.fail("The file <resources/api_data/environment.json> is not found");
+        }
+
+        return null;
+    }
+
+    private Catalog searchAndSetCatalog(String catalogName) {
+        Gson gson = new Gson();
+        try (InputStream is = REST.class.getClassLoader().getResourceAsStream("api_data/catalog.json")) {
+
+            Reader reader = new InputStreamReader(is, StandardCharsets.UTF_8);
+
+            Catalog[] listCatalog = gson.fromJson(reader, Catalog[].class);
+
+            for (Catalog catalogFromList : listCatalog) {
+                if (catalogFromList.getNameCatalog().equals(catalogName))
+                    return catalogFromList;
+            }
+        } catch (IOException e) {
+            Assertions.fail("The file <resources/api_data/catalog.json> is not found");
+        }
+        return null;
+
+    }
+
+    // Getters & Setters
+
+    public String getBaseURL() {
+        return baseURL;
+    }
+
+    public void setBaseURL(String endpoint) {
+        this.baseURL = endpoint;
+    }
+
+    public String getEnvironmentName() {
+        return environmentName;
+    }
+
+    public void setEnvironmentName(String environmentName) {
+        this.environmentName = environmentName;
+    }
+
+    public Catalog getCatalog() {
+        return catalog;
+    }
+
+    public void setCatalog(Catalog catalog) {
+        this.catalog = catalog;
+    }
+
+    public Endpoint getEndpoint(String operationName) {
+            
+        Endpoint endpoint = null;
+        for (Endpoint endpointFromList : catalog.getListEndpoint()) {
+                if(endpointFromList.getName().equals(operationName))
+                    endpoint = endpointFromList;
+        }
+        if(endpoint == null)
+            Assertions.fail("The operation <" + operationName + "> has not been found in the catalog");
+
+        return endpoint;
     }
 
 }

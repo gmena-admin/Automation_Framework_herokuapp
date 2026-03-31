@@ -1,0 +1,26 @@
+[
+    {
+        "name_env": "PRO",
+        "base_url": "https://thinking-tester-contact-list.herokuapp.com",
+        "user": "MaravillaTest22@test.com",
+        "pass": "123456789"
+    },
+    {
+        "name_env": "PRE",
+        "base_url": "https://thinking-tester-contact-list.herokuapp.com",
+        "user": "",
+        "pass": ""
+    },
+    {
+        "name_env": "TST",
+        "base_url": "https://thinking-tester-contact-list.herokuapp.com",
+        "user": "",
+        "pass": ""
+    },
+    {
+        "name_env": "DEV",
+        "base_url": "https://thinking-tester-contact-list.herokuapp.com",
+        "user": "",
+        "pass": ""
+    }
+]

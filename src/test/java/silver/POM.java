@@ -19,7 +19,7 @@ import steps.hooks.Preconditions;
 public class POM {
 
     protected WebDriver driver;
-    protected Reader reader;
+    protected UtilityReader reader;
 
     private int indexScreenshot = 0;
 
@@ -30,7 +30,7 @@ public class POM {
 
     public POM(WebDriver driver) {
         this.driver = driver;
-        this.reader = new Reader();
+        this.reader = new UtilityReader();
     }
 
     public void clickOn(String elementName, String... propertyList) {

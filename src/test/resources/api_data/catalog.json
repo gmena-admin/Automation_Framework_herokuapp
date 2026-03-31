@@ -1,0 +1,54 @@
+[
+    {
+        "name": "Users",
+        "endpoints": [
+            {
+                "endpoint_name": "Log In User",
+                "endpoint_path": "/users/login",
+                "endpoint_method": "POST",
+                "endpoint_payload_file": "api_data/templates/Users/Login.json"
+            }
+        ]
+    },
+    {
+        "name": "Contacts",
+        "endpoints": [
+            {
+                "endpoint_name": "Add Contact",
+                "endpoint_path": "/contacts",
+                "endpoint_method": "POST",
+                "endpoint_payload_file": "api_data/templates/Contacts/AddContact.json"
+            },
+            {
+                "endpoint_name": "Get Contact List",
+                "endpoint_path": "/contacts",
+                "endpoint_method": "GET",
+                "endpoint_payload_file": ""
+            },
+            {
+                "endpoint_name": "Get Contact",
+                "endpoint_path": "/contacts/",
+                "endpoint_method": "GET",
+                "endpoint_payload_file": ""
+            },
+            {
+                "endpoint_name": "Update Contact",
+                "endpoint_path": "/contacts/",
+                "endpoint_method": "PUT",
+                "endpoint_payload_file": "api_data/templates/Contacts/UpdateContact.json"
+            },
+            {
+                "endpoint_name": "Update Contact (single property)",
+                "endpoint_path": "/contacts/",
+                "endpoint_method": "PATCH",
+                "endpoint_payload_file": "api_data/templates/Contacts/UpdateContactSingleProperty.json"
+            },
+            {
+                "endpoint_name": "Delete Contact",
+                "endpoint_path": "/contacts/",
+                "endpoint_method": "DELETE",
+                "endpoint_payload_file": ""
+            }
+        ]
+    }
+]

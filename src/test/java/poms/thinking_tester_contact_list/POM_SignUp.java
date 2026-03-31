@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.WebDriver;
 
 import silver.POM;
-import silver.Reader;
+import silver.UtilityReader;
 import steps.hooks.Preconditions;
 
 public class POM_SignUp extends POM {

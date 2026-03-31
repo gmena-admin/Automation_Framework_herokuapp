@@ -4,57 +4,54 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
+import silver.Endpoint;
+import silver.Payload;
 import silver.REST;
+import silver.RestOperations;
 
 public class ApiSteps {
 
     private REST apiServices;
+    private Endpoint endpoint;
     private Response response;
 
-    @Given("Having {string} as the endpoint")
-    public void setEndpoint(String endpoint) {
-
-        apiServices = new REST(endpoint);
+    @Given("The API tests are running under {string} environment and using the catalog {string}")
+    public void setEnvironment(String environment, String catalog) {
+        apiServices = new REST(environment, catalog);
     }
 
-    @When("Using \"{string}\" file as the payload")
-    public void loadPayload(String filename) {
-        apiServices.setPayload(filename);
+    @Given("I login into the system")
+    public void loginIntoSystem() {
+        REST apiLoginServices = new REST(apiServices.getEnvironmentName(), "Users");
+
+        Endpoint endpointLogin = null;
+        for (Endpoint endpointFromList : apiLoginServices.getCatalog().getListEndpoint())
+            if (endpointFromList.getName().equals("Log In User")) {
+                endpointLogin = endpointFromList;
+            }
+
+        Response responseLogin = RestOperations.sendRequest(apiLoginServices.getBaseURL(), endpointLogin);
+        String token = responseLogin.then()
+                .statusCode(200)
+                .extract().body().path("token");
+        RestOperations.setToken(token);
     }
 
-    @When("The request is sent by {string}")
-    public void sendRequest(String operation) {
-        switch (operation) {
-            case "POST":
-                response = apiServices.post("");
-                break;
-            case "GET":
-                response = apiServices.get("");
-                break;
-
-            case "PUT":
-                response = apiServices.put("");
-                break;
-
-            case "DELETE":
-                response = apiServices.delete("");
-                break;
-
-            default:
-                break;
-        }
+    @Given("I include the information for a {string} operation using the dataset {string} for row {int}")
+    public void sayText(String operationName, String datasetFileName, int rowNumber) {
+        this.endpoint = apiServices.getEndpoint(operationName);
+        Payload payload = this.endpoint.setValuesInPayload(datasetFileName, rowNumber, endpoint.getPayload());
+        this.endpoint.setPayload(payload);
     }
 
-    @Then("The {string} should be {string}")
-    public void validateParameter(String parameterName, String expectedValue) {
-        switch (parameterName) {
-            case "StatusCode":
-                apiServices.validateStatusCode(response, Integer.parseInt(expectedValue));
-                break;
-
-            default:
-                break;
-        }
+    @When("I send the operation")
+    public void sendOperation() {
+        this.response = RestOperations.sendRequest(apiServices.getBaseURL(), endpoint);
     }
 
+    @Then("The status code is {int}")
+    public void checkStatusCode(int expectedStatusCode) {
+        this.response.then()
+                .statusCode(expectedStatusCode);
+    }
 }

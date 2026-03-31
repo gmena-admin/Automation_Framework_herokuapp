@@ -13,14 +13,13 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.release>17</maven.compiler.release>
-    <allure.version>2.24.0</allure.version>
+    <allure.version>2.33.0</allure.version>
     <junitPlatformEngine>6.0.3</junitPlatformEngine>
     <cucumberJava>7.34.3</cucumberJava>
     <cucumberJunit>7.34.3</cucumberJunit>
+    <apache.poi.version>5.5.1</apache.poi.version>
   </properties>
 
-  <!-- Add allure-bom to dependency management to ensure correct versions of all the dependencies
-  are used -->
   <dependencyManagement>
     <dependencies>
       <dependency>
@@ -60,6 +59,11 @@
       <groupId>io.qameta.allure</groupId>
       <artifactId>allure-junit-platform</artifactId>
       <scope>test</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>io.qameta.allure</groupId>
+      <artifactId>allure-rest-assured</artifactId>
     </dependency>
 
 
@@ -106,18 +110,30 @@
     </dependency>
 
     <dependency>
-      <groupId>org.projectlombok</groupId>
-      <artifactId>lombok</artifactId>
-      <version>1.18.42</version>
-      <scope>provided</scope>
-    </dependency>
-
-    <dependency>
       <groupId>ch.qos.logback</groupId>
       <artifactId>logback-classic</artifactId>
       <version>1.4.14</version>
     </dependency>
 
+    <!-- Source: https://mvnrepository.com/artifact/org.apache.poi/poi -->
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi</artifactId>
+      <version>${apache.poi.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi-ooxml</artifactId>
+      <version>${apache.poi.version}</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.42</version>
+      <scope>provided</scope>
+    </dependency>
   </dependencies>
 
   <build>
