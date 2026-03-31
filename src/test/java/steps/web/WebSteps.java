@@ -1,5 +1,6 @@
 package steps.web;
 
+import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.WebDriver;
 
 import io.cucumber.java.en.And;
@@ -52,14 +53,43 @@ public class WebSteps {
         pomSignUp.pushButton("Submit");
     }
 
-    @Then("An error appeared --> {string}")
-    public void error_is_showed(String reason) {
-        pomSignUp.errorAppeared(reason);
+    @When("Fullfill the information {string} and {string}")
+    public void fullfill_the_information_and(String email, String password) {
+        pomLogin.writeField("email", email);
+        pomLogin.writeField("password", password);
+    }
+
+    @When("Log in")
+    public void log_in() {
+        pomLogin.logIn();
+    }
+
+    @Then("An error appeared in {string} --> {string}")
+    public void error_is_showed(String page, String reason) {
+        switch (page) {
+            case "Login Screen":
+                pomLogin.errorAppeared(reason);
+                break;
+            case "SignUp Screen":
+                pomSignUp.errorAppeared(reason);
+                break;
+            default:
+                Assertions.fail("The error handling for the screen < " + page + "> is not yet implemented");
+                break;
+        }
+
     }
 
     @Then("The user is created properly")
     public void the_user_is_created_properly() {
         pomSignUp.checkNoErrors();
+        pomContactList.assertPage();
+
+    }
+
+    @Then("The user is logged properly")
+    public void the_user_is_logged_properly() {
+        pomLogin.checkNoErrors();
         pomContactList.assertPage();
 
     }

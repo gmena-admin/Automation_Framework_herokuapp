@@ -9,7 +9,6 @@ import steps.hooks.Preconditions;
 
 public class POM_SignUp extends POM {
 
-    Reader reader = new Reader();
     private String password;
 
     public POM_SignUp(WebDriver driver) {
@@ -67,7 +66,7 @@ public class POM_SignUp extends POM {
 
     public void checkNoErrors() {
         try {
-            not_find(Preconditions.isDebugScreenshot(), LONG_TIMEOUT, "span_by_id", "error");
+            not_find(Preconditions.isDebugScreenshot(), SHORTEST_TIMEOUT, "span_by_id", "error");
         } catch (AssertionError e) {
             throw new AssertionError("There is a problem with the data that has been used in the previous step");
         }

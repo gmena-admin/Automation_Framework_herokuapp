@@ -18,8 +18,9 @@ import steps.hooks.Preconditions;
 
 public class POM {
 
-    private WebDriver driver;
-    private Reader reader;
+    protected WebDriver driver;
+    protected Reader reader;
+
     private int indexScreenshot = 0;
 
     public static final int SHORTEST_TIMEOUT = 2000;
@@ -77,27 +78,23 @@ public class POM {
     }
 
     public void not_find(boolean takeScreenshot, int timeout, String elementName, String... propertyList) {
-
         String property = reader.readProperty(elementName, propertyList);
-
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(timeout));
 
-        boolean foundElement = wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath(property)));
-
-        if (!foundElement) {
-            if (takeScreenshot)
-                takeScreenshot(null);
-
-        } else {
-
+        try {
             WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(property)));
-
-            takeScreenshot(element);
+            
+            if (takeScreenshot)
+                takeScreenshot(element);
+            
 
             Assertions.fail("An element <" + elementName + "> has been found in the website");
-
+            
+        } catch (TimeoutException e) {
+            if (takeScreenshot) {
+                takeScreenshot(null);
+            }
         }
-
     }
 
     public void takeScreenshot(WebElement elementNode) {
