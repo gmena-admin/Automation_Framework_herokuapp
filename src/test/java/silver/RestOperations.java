@@ -18,13 +18,15 @@ public class RestOperations {
 
         String method = endpoint.getMethod();
         String path = endpoint.getPath();
-        String payload = endpoint.getPayload().toJson();
 
         RequestSpecification specs = given()
                 .filter(new AllureRestAssured())
                 .baseUri(baseURL)
                 .basePath(path)
-                .body(payload).contentType(ContentType.JSON);
+                .contentType(ContentType.JSON);
+
+        if (endpoint.getPayload() != null)
+            specs = specs.body(endpoint.getPayload().toJson());
 
         if (token != null)
             specs = specs.header(new Header("Authorization", "Bearer " + token));

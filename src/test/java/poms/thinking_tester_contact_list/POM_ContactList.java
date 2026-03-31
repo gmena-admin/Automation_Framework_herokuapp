@@ -3,7 +3,7 @@ package poms.thinking_tester_contact_list;
 import org.openqa.selenium.WebDriver;
 
 import silver.POM;
-import steps.hooks.Preconditions;
+import steps.hooks.Hooks;
 
 public class POM_ContactList extends POM {
 
@@ -12,7 +12,7 @@ public class POM_ContactList extends POM {
     }
 
     public void assertPage() {
-        find(Preconditions.isDebugScreenshot(), SHORT_TIMEOUT, "h1_by_text", "Contact List");
+        find(Hooks.isDebugScreenshot(), SHORT_TIMEOUT, "h1_by_text", "Contact List");
 
     }
 

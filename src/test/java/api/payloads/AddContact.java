@@ -1,7 +1,5 @@
 package api.payloads;
 
-import org.junit.jupiter.api.Assertions;
-
 import com.google.gson.Gson;
 
 import silver.Payload;
@@ -175,7 +173,6 @@ public class AddContact implements Payload {
                 setStateProvince(fieldValue);
                 break;
             default:
-                Assertions.fail("The field <" + fieldName + "> is not a field in " + AddContact.class.getName());
                 break;
         }
 

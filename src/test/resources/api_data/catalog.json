@@ -27,25 +27,25 @@
             },
             {
                 "endpoint_name": "Get Contact",
-                "endpoint_path": "/contacts/",
+                "endpoint_path": "/contacts/{contactID}",
                 "endpoint_method": "GET",
                 "endpoint_payload_file": ""
             },
             {
                 "endpoint_name": "Update Contact",
-                "endpoint_path": "/contacts/",
+                "endpoint_path": "/contacts/{contactID}",
                 "endpoint_method": "PUT",
                 "endpoint_payload_file": "api_data/templates/Contacts/UpdateContact.json"
             },
             {
                 "endpoint_name": "Update Contact (single property)",
-                "endpoint_path": "/contacts/",
+                "endpoint_path": "/contacts/{contactID}",
                 "endpoint_method": "PATCH",
                 "endpoint_payload_file": "api_data/templates/Contacts/UpdateContactSingleProperty.json"
             },
             {
                 "endpoint_name": "Delete Contact",
-                "endpoint_path": "/contacts/",
+                "endpoint_path": "/contacts/{contactID}",
                 "endpoint_method": "DELETE",
                 "endpoint_payload_file": ""
             }

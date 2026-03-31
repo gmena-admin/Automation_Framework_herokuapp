@@ -1,4 +1,4 @@
-@WEB
+@WEB @Edge
 Feature: Web Test Cases for Smoke Suite
 
 @Smoke

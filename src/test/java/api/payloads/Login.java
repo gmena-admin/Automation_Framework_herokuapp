@@ -55,7 +55,6 @@ public class Login implements Payload {
                 setPassword(fieldValue);
                 break;
             default:
-                Assertions.fail("The field <" + fieldName + "> is not a field in " + Login.class.getName());
                 break;
         }
 

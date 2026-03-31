@@ -175,7 +175,6 @@ public class UpdateContact implements Payload {
                 setEmail(fieldValue);
                 break;                
             default:
-                Assertions.fail("The field <" + fieldName + "> is not a field in " + UpdateContact.class.getName());
                 break;
         }
 

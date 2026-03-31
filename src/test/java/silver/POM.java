@@ -14,7 +14,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import io.qameta.allure.Allure;
-import steps.hooks.Preconditions;
+import steps.hooks.Hooks;
 
 public class POM {
 
@@ -35,7 +35,7 @@ public class POM {
 
     public void clickOn(String elementName, String... propertyList) {
 
-        WebElement element = find(Preconditions.isDebugScreenshot(), SHORTEST_TIMEOUT, elementName, propertyList);
+        WebElement element = find(Hooks.isDebugScreenshot(), SHORTEST_TIMEOUT, elementName, propertyList);
 
         element.click();
 
@@ -43,7 +43,7 @@ public class POM {
 
     public void writeIn(String text, String elementName, String... propertyList) {
 
-        WebElement element = find(Preconditions.isDebugScreenshot(), SHORTEST_TIMEOUT, elementName, propertyList);
+        WebElement element = find(Hooks.isDebugScreenshot(), SHORTEST_TIMEOUT, elementName, propertyList);
 
         element.sendKeys(text);
 
@@ -51,7 +51,7 @@ public class POM {
 
     public String getText(String elementName, String... propertyList) {
 
-        WebElement element = find(Preconditions.isDebugScreenshot(), SHORTEST_TIMEOUT, elementName, propertyList);
+        WebElement element = find(Hooks.isDebugScreenshot(), SHORTEST_TIMEOUT, elementName, propertyList);
 
         return element.getText();
 
@@ -104,7 +104,7 @@ public class POM {
                 byte[] scrFile = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
 
                 Allure.addAttachment(
-                        Preconditions.getScenarioName() + "_" + this.getClass().getSimpleName() + "_"
+                        Hooks.getScenarioName() + "_" + this.getClass().getSimpleName() + "_"
                                 + ++indexScreenshot,
                         "image/png",
                         new java.io.ByteArrayInputStream(scrFile), ".png");
@@ -117,7 +117,7 @@ public class POM {
                 byte[] scrFileWithJS = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
 
                 Allure.addAttachment(
-                        Preconditions.getScenarioName() + "__" + this.getClass().getSimpleName() + "_"
+                        Hooks.getScenarioName() + "__" + this.getClass().getSimpleName() + "_"
                                 + ++indexScreenshot,
                         "image/png",
                         new java.io.ByteArrayInputStream(scrFileWithJS), ".png");

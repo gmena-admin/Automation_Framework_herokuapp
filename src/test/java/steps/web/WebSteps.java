@@ -10,11 +10,11 @@ import io.cucumber.java.en.When;
 import poms.thinking_tester_contact_list.POM_ContactList;
 import poms.thinking_tester_contact_list.POM_Login;
 import poms.thinking_tester_contact_list.POM_SignUp;
-import steps.hooks.Preconditions;
+import steps.hooks.Hooks;
 
 public class WebSteps {
 
-    private WebDriver driver = Preconditions.getDriver();
+    private WebDriver driver = Hooks.getDriver();
 
     private POM_Login pomLogin = new POM_Login(driver);
     private POM_SignUp pomSignUp = new POM_SignUp(driver);

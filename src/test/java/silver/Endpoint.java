@@ -16,7 +16,6 @@ import java.util.Map;
 import java.util.stream.Stream;
 
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -178,36 +177,18 @@ public class Endpoint {
     }
 
     public Payload setValuesInPayload(String datasetFileName, int rowNumber, Payload payload) {
-        Map<String, String> valuesInRow = new HashMap<>();
-        try {
+        Map<String, String> valuesInRow = UtilityReader.readValuesFromDataSet(datasetFileName, rowNumber);
 
-            URL resource = Endpoint.class.getResource("/api_data/datasets/" + datasetFileName);
-            File file = new File(resource.toURI());
 
-            FileInputStream fileinput = new FileInputStream(file);
-            XSSFWorkbook workbook = new XSSFWorkbook(fileinput);
-
-            XSSFSheet sheet = workbook.getSheetAt(0);
-
-            Row headerRow = sheet.getRow(0);
-            Row valuesRow = sheet.getRow(rowNumber - 1);
-
-            for (int i = 0; i < headerRow.getPhysicalNumberOfCells(); i++) {
-                Cell cellValue = valuesRow.getCell(i);
-
-                String value = cellValue.getStringCellValue();
-
-                valuesInRow.put(headerRow.getCell(i).getStringCellValue(), value);
-            }
-
-            workbook.close();
-
-        } catch (Exception e) {
-            Assertions.fail(e.getMessage());
-        }
 
         for (String key : valuesInRow.keySet()) {
-            payload.setValue(key, valuesInRow.get(key));
+            if (key.equals("_id")) {
+                String id =  UtilityReader.getValueFromRow(datasetFileName, rowNumber, key);
+                path = path.replaceAll("\\{contactID\\}", id);
+                
+            }
+            if (payload != null)
+                payload.setValue(key, valuesInRow.get(key));
         }
 
         return payload;

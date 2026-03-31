@@ -89,3 +89,8 @@ nb-configuration.xml
 ##############################
 *.log
 *.png
+##############################
+## Allure
+##############################
+allure-report/
+allure-results/

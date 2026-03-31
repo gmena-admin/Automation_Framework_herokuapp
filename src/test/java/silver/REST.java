@@ -10,8 +10,6 @@ import org.junit.jupiter.api.Assertions;
 
 import com.google.gson.Gson;
 
-import io.restassured.internal.common.assertion.Assertion;
-
 public class REST {
 
     private String baseURL;

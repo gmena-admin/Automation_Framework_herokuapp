@@ -4,8 +4,7 @@ import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.WebDriver;
 
 import silver.POM;
-import silver.UtilityReader;
-import steps.hooks.Preconditions;
+import steps.hooks.Hooks;
 
 public class POM_SignUp extends POM {
 
@@ -16,8 +15,8 @@ public class POM_SignUp extends POM {
     }
 
     public void assertPage() {
-        find(Preconditions.isDebugScreenshot(), SHORT_TIMEOUT, "h1_by_text", "Add User");
-        find(Preconditions.isDebugScreenshot(), SHORT_TIMEOUT, "img_footer");
+        find(Hooks.isDebugScreenshot(), SHORT_TIMEOUT, "h1_by_text", "Add User");
+        find(Hooks.isDebugScreenshot(), SHORT_TIMEOUT, "img_footer");
     }
 
     public void writeField(String fieldName, String fieldValue) {
@@ -45,7 +44,7 @@ public class POM_SignUp extends POM {
     }
 
     public void errorAppeared(String reasonStr) {
-        find(Preconditions.isDebugScreenshot(), SHORT_TIMEOUT, "span_by_id", "error");
+        find(Hooks.isDebugScreenshot(), SHORT_TIMEOUT, "span_by_id", "error");
 
         String errorText = getText("span_by_id", "error");
 
@@ -66,7 +65,7 @@ public class POM_SignUp extends POM {
 
     public void checkNoErrors() {
         try {
-            not_find(Preconditions.isDebugScreenshot(), SHORTEST_TIMEOUT, "span_by_id", "error");
+            not_find(Hooks.isDebugScreenshot(), SHORTEST_TIMEOUT, "span_by_id", "error");
         } catch (AssertionError e) {
             throw new AssertionError("There is a problem with the data that has been used in the previous step");
         }
