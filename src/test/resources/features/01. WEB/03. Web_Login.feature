@@ -1,4 +1,4 @@
-@WEB @Login
+@WEB @Login @Sanity @Edge
 Feature: Web Test Cases for Login
 
     Background:

@@ -7,6 +7,18 @@
                 "endpoint_path": "/users/login",
                 "endpoint_method": "POST",
                 "endpoint_payload_file": "api_data/templates/Users/Login.json"
+            },
+            {
+                "endpoint_name": "Delete User",
+                "endpoint_path": "/users/me",
+                "endpoint_method": "DELETE",
+                "endpoint_payload_file": ""
+            },
+            {
+                "endpoint_name": "Create User",
+                "endpoint_path": "/users",
+                "endpoint_method": "POST",
+                "endpoint_payload_file": "api_data/templates/Users/AddUser.json"
             }
         ]
     },
@@ -38,7 +50,7 @@
                 "endpoint_payload_file": "api_data/templates/Contacts/UpdateContact.json"
             },
             {
-                "endpoint_name": "Update Contact (single property)",
+                "endpoint_name": "Update Contact (unique properties)",
                 "endpoint_path": "/contacts/{contactID}",
                 "endpoint_method": "PATCH",
                 "endpoint_payload_file": "api_data/templates/Contacts/UpdateContactSingleProperty.json"

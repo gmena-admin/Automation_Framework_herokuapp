@@ -50,7 +50,7 @@ public class UtilityReader {
 
         try {
             // load a properties file from class path, inside static method
-            prop.load(UtilityReader.class.getClassLoader().getResourceAsStream("errors_addUser.properties"));
+            prop.load(UtilityReader.class.getClassLoader().getResourceAsStream("errors_list.properties"));
 
             // get the property value and print it out
             xpath = prop.getProperty(name);
@@ -100,7 +100,7 @@ public class UtilityReader {
             for (int i = 0; i < headerRow.getPhysicalNumberOfCells(); i++) {
                 Cell cellValue = valuesRow.getCell(i);
 
-                String value = cellValue != null ? cellValue.getStringCellValue() : null;
+                String value = cellValue != null && !cellValue.getStringCellValue().isEmpty() ? cellValue.getStringCellValue() : null;
 
                 valuesInRow.put(headerRow.getCell(i).getStringCellValue(), value);
             }
@@ -139,7 +139,7 @@ public class UtilityReader {
             }
 
             Assertions.assertNotEquals(-1, cellValueIndex,
-                    "The header <" + header + "has not been found in the dataset");
+                    "The header <" + header + "> header has not been found in the dataset");
 
             valuesRow.createCell(cellValueIndex).setCellValue(valueToWrite);
 
@@ -179,7 +179,7 @@ public class UtilityReader {
             Assertions.assertNotEquals(-1, cellValueIndex,
                     "The header <" + header + "has not been found in the dataset");
 
-            valueFromCell = valuesRow.getCell(cellValueIndex) != null ? valuesRow.getCell(cellValueIndex).getStringCellValue() : "";
+            valueFromCell = valuesRow.getCell(cellValueIndex) != null ? valuesRow.getCell(cellValueIndex).getStringCellValue() : null;
 
             workbook.close();
 

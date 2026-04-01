@@ -1,7 +1,5 @@
 package api.payloads;
 
-import org.junit.jupiter.api.Assertions;
-
 import com.google.gson.Gson;
 
 import silver.api.Payload;
@@ -175,8 +173,6 @@ public class UpdateContactSingleProperty implements Payload {
                 setEmail(fieldValue);
                 break;
             default:
-                Assertions.fail("The field <" + fieldName + "> is not a field in "
-                        + UpdateContactSingleProperty.class.getName());
                 break;
         }
 

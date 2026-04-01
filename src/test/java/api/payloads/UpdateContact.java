@@ -18,17 +18,17 @@ public class UpdateContact implements Payload {
     private String country;
 
     public UpdateContact() {
-        firstName = "";
-        lastName = "";
-        birthdate = "";
-        email = "";
-        phone = "";
-        street1 = "";
-        street2 = "";
-        city = "";
-        postalCode = "";
-        country = "";
-        stateProvince = "";
+        firstName = null;
+        lastName = null;
+        birthdate = null;
+        email = null;
+        phone = null;
+        street1 = null;
+        street2 = null;
+        city = null;
+        postalCode = null;
+        country = null;
+        stateProvince = null;
     }
 
     public String getFirstName() {
