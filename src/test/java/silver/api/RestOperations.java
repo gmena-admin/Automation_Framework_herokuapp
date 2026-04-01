@@ -1,4 +1,4 @@
-package silver;
+package silver.api;
 
 import static io.restassured.RestAssured.given;
 

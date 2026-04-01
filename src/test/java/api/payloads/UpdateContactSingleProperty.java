@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Assertions;
 
 import com.google.gson.Gson;
 
-import silver.Payload;
+import silver.api.Payload;
 
 public class UpdateContactSingleProperty implements Payload {
     private String firstName;

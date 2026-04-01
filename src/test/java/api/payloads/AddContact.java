@@ -2,7 +2,7 @@ package api.payloads;
 
 import com.google.gson.Gson;
 
-import silver.Payload;
+import silver.api.Payload;
 
 public class AddContact implements Payload {
     private String firstName;

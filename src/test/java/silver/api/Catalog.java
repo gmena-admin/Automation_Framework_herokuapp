@@ -1,4 +1,4 @@
-package silver;
+package silver.api;
 
 import java.util.ArrayList;
 import java.util.List;

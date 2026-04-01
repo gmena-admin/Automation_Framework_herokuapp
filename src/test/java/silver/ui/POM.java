@@ -1,4 +1,4 @@
-package silver;
+package silver.ui;
 
 import java.time.Duration;
 
@@ -14,6 +14,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import io.qameta.allure.Allure;
+import silver.Utilities.UtilityReader;
 import steps.hooks.Hooks;
 
 public class POM {

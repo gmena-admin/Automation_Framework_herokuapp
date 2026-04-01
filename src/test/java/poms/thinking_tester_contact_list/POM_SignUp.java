@@ -3,7 +3,7 @@ package poms.thinking_tester_contact_list;
 import org.junit.jupiter.api.Assertions;
 import org.openqa.selenium.WebDriver;
 
-import silver.POM;
+import silver.ui.POM;
 import steps.hooks.Hooks;
 
 public class POM_SignUp extends POM {

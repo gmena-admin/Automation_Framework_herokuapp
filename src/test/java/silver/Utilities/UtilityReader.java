@@ -1,10 +1,9 @@
-package silver;
+package silver.Utilities;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -16,8 +15,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.junit.jupiter.api.Assertions;
 
 import com.google.gson.Gson;
-
-import lombok.val;
 
 public class UtilityReader {
 

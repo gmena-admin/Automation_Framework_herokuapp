@@ -4,11 +4,11 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import io.restassured.response.Response;
-import silver.Endpoint;
-import silver.Payload;
-import silver.REST;
-import silver.RestOperations;
-import silver.UtilityReader;
+import silver.Utilities.UtilityReader;
+import silver.api.Endpoint;
+import silver.api.Payload;
+import silver.api.REST;
+import silver.api.RestOperations;
 
 public class ApiSteps {
 

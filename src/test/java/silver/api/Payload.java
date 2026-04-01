@@ -1,4 +1,4 @@
-package silver;
+package silver.api;
 
 public interface Payload {
     

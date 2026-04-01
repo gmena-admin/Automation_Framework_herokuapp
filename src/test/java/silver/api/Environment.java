@@ -1,4 +1,4 @@
-package silver;
+package silver.api;
 
 import com.google.gson.annotations.SerializedName;
 
