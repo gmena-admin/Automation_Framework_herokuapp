@@ -16,18 +16,26 @@ import org.junit.jupiter.api.Assertions;
 
 import com.google.gson.Gson;
 
+/**
+ * Utility class for reading properties, error definitions, JSON payloads,
+ * and Excel dataset values from the project resources.
+ */
 public class UtilityReader {
 
+    /**
+     * Reads an XPath locator from the `xpath_repository.properties` file.
+     *
+     * @param name       the property key to read
+     * @param parameters optional replacement values for placeholders like $1, $2
+     * @return the resolved XPath string or an empty string if the property is missing
+     */
     public String readProperty(String name, String... parameters) {
         String xpath = "";
 
         Properties prop = new Properties();
 
         try {
-            // load a properties file from class path, inside static method
             prop.load(UtilityReader.class.getClassLoader().getResourceAsStream("xpath_repository.properties"));
-
-            // get the property value and print it out
             xpath = prop.getProperty(name);
 
             if (parameters.length > 0) {
@@ -43,16 +51,20 @@ public class UtilityReader {
         return xpath;
     }
 
+    /**
+     * Reads an error message template from the `errors_list.properties` file.
+     *
+     * @param name       the property key to read
+     * @param parameters optional replacement values for placeholders like $1, $2
+     * @return the resolved error message template or an empty string if the property is missing
+     */
     public String readErrorProperty(String name, String... parameters) {
         String xpath = "";
 
         Properties prop = new Properties();
 
         try {
-            // load a properties file from class path, inside static method
             prop.load(UtilityReader.class.getClassLoader().getResourceAsStream("errors_list.properties"));
-
-            // get the property value and print it out
             xpath = prop.getProperty(name);
 
             if (parameters.length > 0) {
@@ -68,6 +80,12 @@ public class UtilityReader {
         return xpath;
     }
 
+    /**
+     * Reads a JSON payload resource from the classpath.
+     *
+     * @param filename the name of the payload file inside `src/test/resources/payloads/`
+     * @return a JSON string representation of the payload resource
+     */
     public String readJSON(String filename) {
         Gson gson = new Gson();
 
@@ -77,6 +95,13 @@ public class UtilityReader {
 
     }
 
+    /**
+     * Reads a row from an Excel dataset and returns the values mapped by header name.
+     *
+     * @param datasetFileName the dataset file name in `src/test/resources/api_data/datasets/`
+     * @param rowNumber       the 1-based row number to read
+     * @return a map of header values and the row cell values
+     */
     public static Map<String, String> readValuesFromDataSet(String datasetFileName, int rowNumber) {
         Map<String, String> valuesInRow = new HashMap<>();
 
@@ -113,6 +138,14 @@ public class UtilityReader {
         return valuesInRow;
     }
 
+    /**
+     * Writes a specific value into an Excel dataset row, using a header column name.
+     *
+     * @param datasetFileName the dataset file name in `src/test/resources/api_data/datasets/`
+     * @param rowNumber       the 1-based row number to update
+     * @param header          the header name to locate the cell
+     * @param valueToWrite    the value to insert into the dataset cell
+     */
     public static void writeValuesFromDataSet(String datasetFileName, int rowNumber, String header,
             String valueToWrite) {
 
@@ -152,6 +185,14 @@ public class UtilityReader {
         }
     }
 
+    /**
+     * Reads a specific field value from an Excel dataset row using a header column name.
+     *
+     * @param datasetFileName the dataset file name in `src/test/resources/api_data/datasets/`
+     * @param rowNumber       the 1-based row number to read
+     * @param header          the header name for the desired value
+     * @return the cell value as a string or null if the cell is empty
+     */
     public static String getValueFromRow(String datasetFileName, int rowNumber, String header) {
         String valueFromCell = "";
         try {

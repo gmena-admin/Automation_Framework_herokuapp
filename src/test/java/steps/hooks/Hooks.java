@@ -15,15 +15,22 @@ import io.cucumber.java.After;
 import io.cucumber.java.Before;
 import io.cucumber.java.Scenario;
 
+/**
+ * Cucumber hooks class responsible for initializing and tearing down browser sessions.
+ */
 public class Hooks {
 
     private static WebDriver driver;
     private static boolean debugScreenshot = false;
     private static String scenarioName = "";
 
+    /**
+     * Runs before each scenario and configures the browser based on tags.
+     *
+     * @param scenario the current Cucumber scenario
+     */
     @Before
     public void beforeScenario(Scenario scenario) {
-
         if (System.getProperty("screenshot") != null)
             debugScreenshot = System.getProperty("screenshot").toLowerCase().equals("true");
 
@@ -36,10 +43,14 @@ public class Hooks {
                     break;
                 default:
             }
-
         }
     }
 
+    /**
+     * Runs after each scenario and closes the browser if it was started.
+     *
+     * @param scenario the current Cucumber scenario
+     */
     @After
     public void afterScenario(Scenario scenario) {
         for (String tag : scenario.getSourceTagNames()) {
@@ -50,18 +61,24 @@ public class Hooks {
                 default:
                     break;
             }
-
         }
     }
 
+    /**
+     * Closes the browser session for web tests.
+     */
     private void afterScenarioWeb() {
         if (driver != null) {
             driver.quit();
         }
     }
 
+    /**
+     * Starts a browser session based on the selected browser tag.
+     *
+     * @param collection the scenario tags to inspect for browser selection
+     */
     private void beforeScenarioWeb(Collection<String> collection) {
-
         int typeOfBrowser = checkBrowserTags(collection);
 
         switch (typeOfBrowser) {
@@ -71,7 +88,6 @@ public class Hooks {
                 optionsChrome.addArguments("start-maximized");
                 driver = new ChromeDriver(optionsChrome);
                 break;
-
             case 2:
                 EdgeOptions optionsEdge = new EdgeOptions();
                 optionsEdge.addArguments("--headless");
@@ -85,11 +101,15 @@ public class Hooks {
                 driver = new FirefoxDriver(optionsFirefox);
                 break;
         }
-
     }
 
+    /**
+     * Determines which browser tag is active in the scenario and ensures only one is selected.
+     *
+     * @param collection the scenario tags
+     * @return an integer code representing the selected browser
+     */
     private int checkBrowserTags(Collection<String> collection) {
-
         boolean isChrome = false;
         boolean isEdge = false;
         boolean isFirefox = false;
@@ -122,29 +142,58 @@ public class Hooks {
         else
             Assertions.fail("Only 1 browser can be selected. Multiple browsers are not yet supported");
         return 0;
-
     }
 
+    /**
+     * Returns the current WebDriver instance.
+     *
+     * @return the active WebDriver
+     */
     public static WebDriver getDriver() {
         return driver;
     }
 
+    /**
+     * Allows tests to override the WebDriver instance.
+     *
+     * @param driver the WebDriver to set
+     */
     public static void setDriver(WebDriver driver) {
         Hooks.driver = driver;
     }
 
+    /**
+     * Returns whether debug screenshots are enabled.
+     *
+     * @return true when screenshot mode is enabled
+     */
     public static boolean isDebugScreenshot() {
         return debugScreenshot;
     }
 
+    /**
+     * Enables or disables debug screenshots.
+     *
+     * @param debugScreenshot true to enable screenshot mode
+     */
     public static void setDebugScreenshot(boolean debugScreenshot) {
         Hooks.debugScreenshot = debugScreenshot;
     }
 
+    /**
+     * Returns the current scenario name sanitized for attachments.
+     *
+     * @return the scenario name with spaces replaced by hyphens
+     */
     public static String getScenarioName() {
         return scenarioName.replaceAll(" ", "-");
     }
 
+    /**
+     * Stores the current scenario name.
+     *
+     * @param scenarioName the scenario name to store
+     */
     public static void setScenarioName(String scenarioName) {
         Hooks.scenarioName = scenarioName;
     }

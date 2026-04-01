@@ -17,6 +17,9 @@ import io.qameta.allure.Allure;
 import silver.Utilities.UtilityReader;
 import steps.hooks.Hooks;
 
+/**
+ * Base page object model class that provides common browser interaction methods.
+ */
 public class POM {
 
     protected WebDriver driver;
@@ -29,11 +32,22 @@ public class POM {
     public static final int LONG_TIMEOUT = 30000;
     public static final int LONGEST_TIMEOUT = 60000;
 
+    /**
+     * Initializes the POM with a WebDriver instance and a UtilityReader.
+     *
+     * @param driver the browser driver instance
+     */
     public POM(WebDriver driver) {
         this.driver = driver;
         this.reader = new UtilityReader();
     }
 
+    /**
+     * Finds an element and clicks on it.
+     *
+     * @param elementName  the name of the element in the XPath repository
+     * @param propertyList optional values to replace placeholders in the XPath
+     */
     public void clickOn(String elementName, String... propertyList) {
 
         WebElement element = find(Hooks.isDebugScreenshot(), SHORTEST_TIMEOUT, elementName, propertyList);
@@ -42,6 +56,13 @@ public class POM {
 
     }
 
+    /**
+     * Finds an element and enters text into it.
+     *
+     * @param text         the text to write
+     * @param elementName  the name of the element in the XPath repository
+     * @param propertyList optional values to replace placeholders in the XPath
+     */
     public void writeIn(String text, String elementName, String... propertyList) {
 
         WebElement element = find(Hooks.isDebugScreenshot(), SHORTEST_TIMEOUT, elementName, propertyList);
@@ -50,6 +71,13 @@ public class POM {
 
     }
 
+    /**
+     * Finds an element and returns its visible text.
+     *
+     * @param elementName  the name of the element in the XPath repository
+     * @param propertyList optional values to replace placeholders in the XPath
+     * @return the visible text of the located element
+     */
     public String getText(String elementName, String... propertyList) {
 
         WebElement element = find(Hooks.isDebugScreenshot(), SHORTEST_TIMEOUT, elementName, propertyList);
@@ -58,6 +86,15 @@ public class POM {
 
     }
 
+    /**
+     * Locates a web element using an XPath expression and optionally captures a screenshot.
+     *
+     * @param takeScreenshot whether to capture an attachment screenshot
+     * @param timeout        maximum wait time in milliseconds
+     * @param elementName    the name of the element in the XPath repository
+     * @param propertyList   optional placeholder values for the XPath
+     * @return the visible WebElement
+     */
     public WebElement find(boolean takeScreenshot, int timeout, String elementName, String... propertyList) {
 
         String property = reader.readProperty(elementName, propertyList);
@@ -78,19 +115,26 @@ public class POM {
         return null;
     }
 
+    /**
+     * Verifies that an element is not present within the given timeout window.
+     *
+     * @param takeScreenshot whether to capture a screenshot if the element exists
+     * @param timeout        maximum wait time in milliseconds
+     * @param elementName    the name of the element in the XPath repository
+     * @param propertyList   optional placeholder values for the XPath
+     */
     public void not_find(boolean takeScreenshot, int timeout, String elementName, String... propertyList) {
         String property = reader.readProperty(elementName, propertyList);
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofMillis(timeout));
 
         try {
             WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath(property)));
-            
+
             if (takeScreenshot)
                 takeScreenshot(element);
-            
 
             Assertions.fail("An element <" + elementName + "> has been found in the website");
-            
+
         } catch (TimeoutException e) {
             if (takeScreenshot) {
                 takeScreenshot(null);
@@ -98,6 +142,12 @@ public class POM {
         }
     }
 
+    /**
+     * Captures a screenshot and attaches it to Allure. If an element is provided,
+     * the element is highlighted first.
+     *
+     * @param elementNode the element to highlight, or null to capture the full page
+     */
     public void takeScreenshot(WebElement elementNode) {
         try {
 
@@ -112,7 +162,6 @@ public class POM {
 
             } else {
                 JavascriptExecutor jse = (JavascriptExecutor) driver;
-                // highlight the element with red border 5px width
                 jse.executeScript("arguments[0].style.border='5px solid yellow'", elementNode);
 
                 byte[] scrFileWithJS = ((TakesScreenshot) driver).getScreenshotAs(OutputType.BYTES);
@@ -124,7 +173,6 @@ public class POM {
                         new java.io.ByteArrayInputStream(scrFileWithJS), ".png");
 
                 jse = (JavascriptExecutor) driver;
-                // highlight the element with red border 5px width
                 jse.executeScript("arguments[0].style.border='none'", elementNode);
 
             }

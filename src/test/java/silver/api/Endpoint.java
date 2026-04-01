@@ -20,6 +20,12 @@ import com.google.gson.annotations.SerializedName;
 
 import silver.Utilities.UtilityReader;
 
+/**
+ * Represents an API endpoint definition loaded from the catalog.
+ *
+ * It maps endpoint metadata such as path, method, and payload template file
+ * to a runtime Payload object.
+ */
 public class Endpoint {
 
     private static final String PAYLOAD_FOLDER = "api_data/templates";
@@ -44,6 +50,9 @@ public class Endpoint {
         loadPayloadTypes();
     }
 
+    /**
+     * Loads available payload classes for JSON templates in the payload folder.
+     */
     private static void loadPayloadTypes() {
         URL resource = Endpoint.class.getClassLoader().getResource(PAYLOAD_FOLDER);
         if (resource == null) {
@@ -79,6 +88,9 @@ public class Endpoint {
         }
     }
 
+    /**
+     * Constructs an empty endpoint to be populated from the JSON catalog.
+     */
     public Endpoint() {
         name = "";
         path = "";
@@ -87,47 +99,100 @@ public class Endpoint {
         payload = null;
     }
 
+    /**
+     * Returns the endpoint operation name.
+     *
+     * @return the endpoint name
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Sets the endpoint operation name.
+     *
+     * @param name the endpoint name
+     */
     public void setName(String name) {
         this.name = name;
     }
 
+    /**
+     * Returns the endpoint path.
+     *
+     * @return the endpoint path
+     */
     public String getPath() {
         return path;
     }
 
+    /**
+     * Sets the endpoint path.
+     *
+     * @param path the endpoint path
+     */
     public void setPath(String path) {
         this.path = path;
     }
 
+    /**
+     * Returns the HTTP method for the endpoint.
+     *
+     * @return the HTTP method
+     */
     public String getMethod() {
         return method;
     }
 
+    /**
+     * Sets the HTTP method for the endpoint.
+     *
+     * @param method the HTTP method to use
+     */
     public void setMethod(String method) {
         this.method = method;
     }
 
+    /**
+     * Returns the configured payload file name.
+     *
+     * @return the payload file path relative to `api_data/templates/`
+     */
     public String getPayloadFile() {
         return payloadFile;
     }
 
+    /**
+     * Sets the payload file and loads the corresponding payload object.
+     *
+     * @param payloadFile the JSON payload template file name
+     */
     public void setPayloadFile(String payloadFile) {
         this.payloadFile = payloadFile;
         loadPayload();
     }
 
+    /**
+     * Sets the payload object directly.
+     *
+     * @param payload the payload instance to use
+     */
     public void setPayload(Payload payload) {
         this.payload = payload;
     }
 
+    /**
+     * Returns the currently loaded payload object.
+     *
+     * @return the payload instance, or null when no payload is configured
+     */
     public Payload getPayload() {
         return this.payload;
     }
 
+    /**
+     * Loads the payload object from the configured payload template file.
+     */
     public void loadPayload() {
         if (this.payloadFile == null || this.payloadFile.isEmpty()) {
             this.payload = null;
@@ -141,7 +206,7 @@ public class Endpoint {
 
         Class<? extends Payload> clazz = PAYLOAD_TYPES.get(normalizedPayloadFile);
         if (clazz == null) {
-            Assertions.fail("No se conoce la clase para el archivo de payload: " + this.payloadFile);
+            Assertions.fail("Unknown payload class for file: " + this.payloadFile);
             return;
         }
 
@@ -149,7 +214,7 @@ public class Endpoint {
         try (InputStream is = Endpoint.class.getClassLoader()
                 .getResourceAsStream(PAYLOAD_FOLDER + "/" + normalizedPayloadFile)) {
             if (is == null) {
-                Assertions.fail("No se encontró el recurso: " + PAYLOAD_FOLDER + "/" + normalizedPayloadFile);
+                Assertions.fail("Resource not found: " + PAYLOAD_FOLDER + "/" + normalizedPayloadFile);
                 return;
             }
 
@@ -157,7 +222,7 @@ public class Endpoint {
             this.payload = gson.fromJson(reader, clazz);
 
         } catch (IOException e) {
-            Assertions.fail("Error leyendo el recurso: " + this.payloadFile, e);
+            Assertions.fail("Error reading payload resource: " + this.payloadFile, e);
         }
     }
 
@@ -172,16 +237,21 @@ public class Endpoint {
                 + ", payload=" + null + "]";
     }
 
+    /**
+     * Loads dataset values into the payload and substitutes path variables.
+     *
+     * @param datasetFileName the Excel dataset file name
+     * @param rowNumber       the 1-based row number to read
+     * @param payload         the payload instance to populate
+     * @return the updated payload instance
+     */
     public Payload setValuesInPayload(String datasetFileName, int rowNumber, Payload payload) {
         Map<String, String> valuesInRow = UtilityReader.readValuesFromDataSet(datasetFileName, rowNumber);
 
-
-
         for (String key : valuesInRow.keySet()) {
             if (key.equals("_id")) {
-                String id =  UtilityReader.getValueFromRow(datasetFileName, rowNumber, key);
+                String id = UtilityReader.getValueFromRow(datasetFileName, rowNumber, key);
                 path = path.replaceAll("\\{contactID\\}", id);
-                
             }
             if (payload != null)
                 payload.setValue(key, valuesInRow.get(key));
