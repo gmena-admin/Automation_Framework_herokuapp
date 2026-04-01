@@ -1,7 +1,5 @@
 package api.payloads;
 
-import org.junit.jupiter.api.Assertions;
-
 import com.google.gson.Gson;
 
 import silver.api.Payload;
