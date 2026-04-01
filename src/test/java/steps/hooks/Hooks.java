@@ -34,8 +34,6 @@ public class Hooks {
                 case "@WEB":
                     beforeScenarioWeb(scenario.getSourceTagNames());
                     break;
-                case "@Mobile":
-                    break;
                 default:
             }
 
@@ -48,9 +46,6 @@ public class Hooks {
             switch (tag) {
                 case "@WEB":
                     afterScenarioWeb();
-                    break;
-                case "@Mobile":
-
                     break;
                 default:
                     break;
