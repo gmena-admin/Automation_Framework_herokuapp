@@ -40,7 +40,8 @@ This repository contains a Java automation framework built for testing a Herokua
   - `API_Patch.feature`
   - `API_Delete.feature`
   - `API_GET.feature`
-- Post-conditions cleanup under `src/test/resources/features/99. PostConditions/99. DeleteUser.feature`
+- Post-conditions cleanup under `src/test/resources/features/99. PostConditions/`
+  - `99. DeleteUser.feature`
 
 ## How the Framework Works
 
