@@ -60,6 +60,14 @@ This repository contains a Java automation framework built for testing a Herokua
 
 ## Running Tests
 
+To download all the necesaries dependencies, the following command should be executed in a terminal:
+
+```powershell
+mvn clean install -U
+```
+
+It will also run the tests automatically.
+
 ### Run all tests
 
 ```powershell
@@ -80,6 +88,14 @@ Web scenarios use tags such as `@chrome`, `@edge`, and `@firefox` together with 
 mvn test "-Dcucumber.filter.tags=@WEB and @chrome"
 ```
 
+#### Include screenshots for web tests
+
+Web scenarios have an option to automatically record the screen for any interaction perform in the website, highlighting the element that the step is interacting with.
+
+```powershell
+mvn test "-Dcucumber.filter.tags=@WEB" "-Dscreenshot=true"
+```
+
 ### Run API scenarios only
 
 ```powershell
@@ -97,6 +113,9 @@ mvn test "-Dcucumber.filter.tags=@PostCondition"
 - `@WEB` - execute web UI tests
 - `@API` - execute API tests
 - `@chrome`, `@edge`, `@firefox` - select browser for UI tests
+
+> Currently, for a performance boost, all web scenarios are set to be executed using the **Edge** browser.
+> To change it, go to the features files and change the tag properly.
 
 ## Allure Reporting
 
